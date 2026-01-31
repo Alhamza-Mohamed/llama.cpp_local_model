@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from models.schemas import GenerateRequest, GenerateResponse
-from services.llama_service import generate_text
+from services.llama_service import build_prompt, generate_text
 
 router = APIRouter()
 
@@ -14,5 +14,6 @@ def generate (req: GenerateRequest):
     Automatically validates incoming JSON against GenerateRequest
     Automatically returns JSON formatted as GenerateResponse
     """
-    result = generate_text(req)
+    full_prompt = build_prompt(req.prompt)
+    result = generate_text(full_prompt, req)
     return GenerateResponse(response = result)

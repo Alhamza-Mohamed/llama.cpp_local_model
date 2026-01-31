@@ -18,7 +18,8 @@ class GenerateRequest(BaseModel):
     prompt: str                 # text the user wants the model to generate from
     n_predict: int = 256        # defult max tokens
     temperature: float = 0.7    # defult randomness
-
+    top_p: float = 0.9          # nucleus sampling        
+    stop: list[str] = ["###"]           #stop when next section starts
 
 # -------------------------- Response schema --------------------------
 
