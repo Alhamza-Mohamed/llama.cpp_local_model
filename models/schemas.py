@@ -45,6 +45,29 @@ class chatRequest(BaseModel):
     top_p:float = 0.9
     stop: list[str] = ["###"]
 
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "you are a helpful AI assistant"
+                    },
+                    {
+                        "role": "user",
+                        "content": "hello, what is transformers?"
+                    }
+                ],                    
+                "n_predict": 256,
+                "temperature": 0.7,
+                "top_p": 0.9,
+                "stop": ["###"]
+            }
+        }
+    }                        
+       
+
+
 
 class GenerateResponse(BaseModel):
     response: str

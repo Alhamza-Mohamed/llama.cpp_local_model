@@ -31,10 +31,10 @@ def build_chat_prompt(messages: List[ChatMessage]) -> str:
         elif message.role == "assistant":
             prompt += f"### Assistant:\n{message.content}\n\n"
         
-        # tell the model to continue as assistant
-        prompt += "### Assistant:\n"
+    # tell the model to continue as assistant
+    prompt += "### Assistant:\n"
         
-        return prompt
+    return prompt
 
 
 def generate_text(full_prompt: str ,req: GenerateRequest) -> str:
@@ -79,7 +79,7 @@ def generate_message(req: chatRequest, message_prompt) -> str:
     
 
     payload = {
-        "messages": message_prompt ,
+        "prompt": message_prompt ,
         "n_predict": req.n_predict,        # max tokens to generate
         "temperature": req.temperature,    # randomness (creativity vs stability)
         "top_p": req.top_p,                # nucleus sampling

@@ -1,2 +1,5 @@
 __pycache__/main.cpython-311.pyc
 luncher.txt
+models/__pycache__/schemas.cpython-311.pyc
+services/__pycache__/llama_service.cpython-311.pyc
+api/__pycache__/Chat.cpython-311.pyc
