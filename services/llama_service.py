@@ -1,8 +1,8 @@
 # requests is used to call llama.cpp over HTTP
 import requests
-
+from typing import List
 from core.config import LLAMA_SERVER_URL
-from models.schemas import GenerateRequest
+from models.schemas import GenerateRequest, chatRequest, ChatMessage
 
 def build_prompt(user_prompt : str) -> str: #isolates prompt logic (clean separation)
     
@@ -14,14 +14,29 @@ def build_prompt(user_prompt : str) -> str: #isolates prompt logic (clean separa
     # ### Input: user message goes here
     # ### Response: The model will continue from here instead of rambling
     return f"""### Instruction: 
-you are a helpful, concise AI assistant.
+    you are a helpful, concise AI assistant.
 
-### Input:
-{user_prompt}
+    ### Input:
+    {user_prompt}
 
-### Response:     
-"""
-    
+    ### Response:     
+    """
+def build_chat_prompt(messages: List[ChatMessage]) -> str:
+    prompt = ""
+    for message in messages:
+        if message.role == "system":
+            prompt += f"### System:\n{message.content}\n\n"
+        elif message.role == "user":
+            prompt += f"### User:\n{message.content}\n\n"
+        elif message.role == "assistant":
+            prompt += f"### Assistant:\n{message.content}\n\n"
+        
+        # tell the model to continue as assistant
+        prompt += "### Assistant:\n"
+        
+        return prompt
+
+
 def generate_text(full_prompt: str ,req: GenerateRequest) -> str:
     # This is the payload expected by llama.cpp
     # Send a formatted prompt to llama.cpp and return clean output.
@@ -45,7 +60,7 @@ def generate_text(full_prompt: str ,req: GenerateRequest) -> str:
     response .raise_for_status()
 
     # Parse JSON from llama.cpp
-    data = response .json()
+    data = response.json()
 
     # Extract generated text safely
     # Some llama.cpp builds return 'content', some 'completion'
@@ -53,4 +68,40 @@ def generate_text(full_prompt: str ,req: GenerateRequest) -> str:
 
     # Strip leading/trailing whitespace and newlines for cleaner output
     return text.strip() #Removes extra newlines, leading/trailing spaces. Makes output nicer for clients
+
+
+    
+
+def generate_message(req: chatRequest, message_prompt) -> str:
+    # This is the payload expected by llama.cpp
+    # Send a formatted prompt to llama.cpp and return clean output.
+        
+    
+
+    payload = {
+        "messages": message_prompt ,
+        "n_predict": req.n_predict,        # max tokens to generate
+        "temperature": req.temperature,    # randomness (creativity vs stability)
+        "top_p": req.top_p,                # nucleus sampling
+        "stop": req.stop                   # stop when next section starts
+
+     
+    }
+
+    # send POST request to llama.cpp server
+    response  = requests.post(LLAMA_SERVER_URL, json = payload ) #send as JSON POST
+
+    # Raise error immediately if llama.cpp returns HTTP 4xx/5xx
+    response .raise_for_status()
+
+    # Parse JSON from llama.cpp
+    data = response.json()
+
+    # Extract generated text safely
+    # Some llama.cpp builds return 'content', some 'completion'
+    text = data.get("content") or data.get("completion") or ""
+
+    # Strip leading/trailing whitespace and newlines for cleaner output
+    return text.strip() #Removes extra newlines, leading/trailing spaces. Makes output nicer for clients
+
 

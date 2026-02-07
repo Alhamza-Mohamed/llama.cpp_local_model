@@ -14,6 +14,7 @@ def generate (req: GenerateRequest):
     Automatically validates incoming JSON against GenerateRequest
     Automatically returns JSON formatted as GenerateResponse
     """
+    
     full_prompt = build_prompt(req.prompt)
     result = generate_text(full_prompt, req)
     return GenerateResponse(response = result)

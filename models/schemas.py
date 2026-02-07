@@ -1,11 +1,11 @@
 from pydantic import BaseModel
-
+from typing import List, Literal
 """ 
 Purpose:
     Define what comes in
     Define what goes out
     No logic 
-
+    Schemas dont run code — they protect reality.
 """
 
 # -------------------------- Request schema --------------------------
@@ -14,6 +14,7 @@ Purpose:
 # {
 #   "prompt": "Hello"
 # }
+
 class GenerateRequest(BaseModel):
     prompt: str                 # text the user wants the model to generate from
     n_predict: int = 256        # defult max tokens
@@ -28,5 +29,22 @@ class GenerateRequest(BaseModel):
 # {
 #   "response": "Hi! How can I help?"
 # }
+
+# --------------------------message schema------------------------------------
+
+class ChatMessage (BaseModel):
+    role: Literal["system", "user", "assistant"] # Literal means: role must be one of these exact strings, nothing else.
+    content: str
+
+
+
+class chatRequest(BaseModel):
+    messages: List[ChatMessage] # List: messages is an ordered list of ChatMessage objects    
+    n_predict: int = 256
+    temperature: float = 0.7
+    top_p:float = 0.9
+    stop: list[str] = ["###"]
+
+
 class GenerateResponse(BaseModel):
     response: str
