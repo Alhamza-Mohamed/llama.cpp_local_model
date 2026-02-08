@@ -1,20 +1,32 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 from models.schemas import  chatRequest, GenerateResponse
-from services.llama_service import build_prompt, generate_message, build_chat_prompt
+from services.llama_service import  generate_message, build_chat_prompt, inject_system_message
 
 router = APIRouter()
 
-# -------------------------- API endpoint --------------------------
+# -------------------------- Example for Swagger --------------------------
 
-@router.post("/generate", response_model = GenerateResponse)
-def generate (req: chatRequest):
+CHAT_REQUEST_EXAMPLE = {
+    "messages": [
+        {
+            "role":"user",
+            "content":"string"
+        }
+    ]
+}
+
+# -------------------------- Chat Endpoint --------------------------
+
+@router.post("/chat", response_model = GenerateResponse)
+def chat (req: chatRequest = Body(example = CHAT_REQUEST_EXAMPLE) ):
     """
-    This function is called when:
-    POST /generate
-    Automatically validates incoming JSON against GenerateRequest
-    Automatically returns JSON formatted as GenerateResponse
+    chat endpoint:
+    -Validates incoming messages
+    -Injects a default system message
+    -Builds the prompt
+    -Calls llama.cpp for generation
     """
-    
-    message_prompt = build_chat_prompt(req.messages)
-    result = generate_message( req, message_prompt)
-    return GenerateResponse(response = result)
+    messages = inject_system_message(req.messages)
+    prompt = build_chat_prompt(messages)
+    result = generate_message( req, prompt)
+    return GenerateResponse(response = result) 

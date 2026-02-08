@@ -22,13 +22,6 @@ class GenerateRequest(BaseModel):
     top_p: float = 0.9          # nucleus sampling        
     stop: list[str] = ["###"]           #stop when next section starts
 
-# -------------------------- Response schema --------------------------
-
-# This defines what our API returns
-# Example JSON:
-# {
-#   "response": "Hi! How can I help?"
-# }
 
 # --------------------------message schema------------------------------------
 
@@ -44,30 +37,16 @@ class chatRequest(BaseModel):
     temperature: float = 0.7
     top_p:float = 0.9
     stop: list[str] = ["###"]
-
-    model_config = {
-        "json_schema_extra": {
-            "example": {
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "you are a helpful AI assistant"
-                    },
-                    {
-                        "role": "user",
-                        "content": "hello, what is transformers?"
-                    }
-                ],                    
-                "n_predict": 256,
-                "temperature": 0.7,
-                "top_p": 0.9,
-                "stop": ["###"]
-            }
-        }
-    }                        
+            
        
+# -------------------------- Chat Response --------------------------
 
 
+# This defines what our API returns
+# Example JSON:
+# {
+#   "response": "Hi! How can I help?"
+# }
 
 class GenerateResponse(BaseModel):
     response: str

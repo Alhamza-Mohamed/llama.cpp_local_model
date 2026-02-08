@@ -1,6 +1,3 @@
-
-
-
 # ---------------------- llama.cpp server endpoint ----------------------
 
 # This is where llama-server.exe is listening

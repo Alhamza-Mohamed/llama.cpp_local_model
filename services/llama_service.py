@@ -4,6 +4,8 @@ from typing import List
 from core.config import LLAMA_SERVER_URL
 from models.schemas import GenerateRequest, chatRequest, ChatMessage
 
+# -------------------- Prompt Builders --------------------
+
 def build_prompt(user_prompt : str) -> str: #isolates prompt logic (clean separation)
     
     """
@@ -21,27 +23,44 @@ def build_prompt(user_prompt : str) -> str: #isolates prompt logic (clean separa
 
     ### Response:     
     """
+
+
 def build_chat_prompt(messages: List[ChatMessage]) -> str:
+    """
+    Build a chat-stile prompt from a list of messages.
+    prepends role headrs (System, User, Assistant) for llama.cpp.
+    """
+    
     prompt = ""
     for message in messages:
-        if message.role == "system":
-            prompt += f"### System:\n{message.content}\n\n"
-        elif message.role == "user":
-            prompt += f"### User:\n{message.content}\n\n"
-        elif message.role == "assistant":
-            prompt += f"### Assistant:\n{message.content}\n\n"
+            role_header = message.role.capitalize() # system -> System
+            prompt += f"### {role_header}:\n{message.content}\n\n"
         
-    # tell the model to continue as assistant
+    # always continue as assistant
     prompt += "### Assistant:\n"
         
     return prompt
 
+# -------------------- System Message Injection --------------------
+
+DEFAULTE_SYSTEM_MESSAGE = "You are a helpful, concise AI assistant."
+
+def inject_system_message(message: List [ChatMessage]) -> List[ChatMessage]:
+    """
+    Ensure a asystem message exists by injecting a default one
+    at the beginnig of the conversation
+    """
+    system_message = ChatMessage(role="system",content=DEFAULTE_SYSTEM_MESSAGE)
+    return [system_message,*message] # *message means unpack the list to append it in the [system_message,*message] list
+
+
+# -------------------- LLM Communication --------------------
 
 def generate_text(full_prompt: str ,req: GenerateRequest) -> str:
-    # This is the payload expected by llama.cpp
-    # Send a formatted prompt to llama.cpp and return clean output.
-        
-    
+    """
+    Send a formatted single-prompt to llama.cpp and return clean generated text.
+    Used by /generate endpoint.
+    """     
 
     payload = {
          "prompt": full_prompt,             # user prompt
@@ -69,17 +88,16 @@ def generate_text(full_prompt: str ,req: GenerateRequest) -> str:
     # Strip leading/trailing whitespace and newlines for cleaner output
     return text.strip() #Removes extra newlines, leading/trailing spaces. Makes output nicer for clients
 
-
     
 
-def generate_message(req: chatRequest, message_prompt) -> str:
-    # This is the payload expected by llama.cpp
-    # Send a formatted prompt to llama.cpp and return clean output.
+def generate_message(req: chatRequest, prompt:str) -> str:
+    """
+    Send a formatted chat prompt to llama.cpp and return generated text.
+    Used by /chat endpoint.
+    """
         
-    
-
     payload = {
-        "prompt": message_prompt ,
+        "prompt": prompt ,
         "n_predict": req.n_predict,        # max tokens to generate
         "temperature": req.temperature,    # randomness (creativity vs stability)
         "top_p": req.top_p,                # nucleus sampling
@@ -88,20 +106,11 @@ def generate_message(req: chatRequest, message_prompt) -> str:
      
     }
 
-    # send POST request to llama.cpp server
-    response  = requests.post(LLAMA_SERVER_URL, json = payload ) #send as JSON POST
+    response = requests.post(LLAMA_SERVER_URL, json=payload)
+    response.raise_for_status()
 
-    # Raise error immediately if llama.cpp returns HTTP 4xx/5xx
-    response .raise_for_status()
-
-    # Parse JSON from llama.cpp
     data = response.json()
-
-    # Extract generated text safely
-    # Some llama.cpp builds return 'content', some 'completion'
     text = data.get("content") or data.get("completion") or ""
-
-    # Strip leading/trailing whitespace and newlines for cleaner output
-    return text.strip() #Removes extra newlines, leading/trailing spaces. Makes output nicer for clients
+    return text.strip()
 
 
