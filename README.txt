@@ -40,9 +40,17 @@ app/
 ├── services/
 │   └── llama_service.py   # Prompt building and LLM communication logic
 └── routes/
-    ├── chat.py            # Chat endpoint
-    └── generate.py        # Single-prompt generation endpoint
-
+│   └── chat.py            # Chat endpoint
+│   └── generate.py        # Single-prompt generation endpoint
+├──rag_core/
+	├── document.py        # Document class
+	├── loader.py          # Load text files
+	├── chunker.py         # Chunk documents
+	├── embedder.py        # Embedding logic (open-source model)
+	├── vector_store.py    # Simple in-memory store
+	├── retriever.py       # Cosine similarity search
+	├── prompt.py          # RAG prompt builder
+	└── pipeline.py        # Orchestrates retrieval + LLM call
 
 
 4- Installation & Setup
