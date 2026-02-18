@@ -1,31 +1,37 @@
 from rag_core.vector_store import VectorStore
 from rag_core.document import Document
-from typing import List
+from typing import List,Dict
 
 class Retriever:
     """
     High-level retrieval logic on top of VectorStore
     Handles top-k section, duplicate removal, and metadat-aware filtering
     """
-
+    
     def __init__(self, store: VectorStore):
         """
         Args: store an instance of VectorStore
         """
         self.store = store
 
-    def retrieve(self, query_embedding: List[float], top_k: int = 5, filter_source: str | None = None) -> List[Document]: 
+    def retrieve(self, query_embedding: List[float], top_k: int = 5, filter_source: str | None = None, per_file_quota: Dict[str, int] | None = None) -> List[Document]: 
         # filter_source: str | None = None fileter source can be str or none and the defult = none 
          """
          Retrieve top-k relevant Document chunks, with optional filtering and duplicate removal.
-
+        
          Args:
             query_embedding: Embedding vector of the query
             top_k: Number of chunks to return
             filter_source: Optional, only retrieve chunks from a specific source file name
          """
          # Step 1: get similarity-ranked results
+         # Fetch extra candidates to allow filtering/dedup/per-file quota
+         buffer_multiplier = 3
+         fetch_k = top_k * buffer_multiplier if not per_file_quota else max(per_file_quota.values()) * buffer_multiplier
          candidates = self.store.search(query_embedding, top_k = top_k * 3)
+         
+
+
 
          # Step  2: optional source filtering
          if filter_source:
