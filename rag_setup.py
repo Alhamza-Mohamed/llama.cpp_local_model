@@ -5,7 +5,7 @@ from rag_core.vector_store import VectorStore
 from rag_core.retriever import Retriever
 from rag_core.prompt import PromptBuilder
 from rag_core.pipeline import Pipeline
-# from rag_core.llm import LlamaLLM TODO
+from rag_core.llm import LlamaLLM 
 
 
 def build_pipeline() -> Pipeline:
@@ -30,14 +30,14 @@ def build_pipeline() -> Pipeline:
     prompt_builder = PromptBuilder()
 
     # 7. LLm
-    # llm = LlamaLLm() TODO
+    llm = LlamaLLM() 
 
     # 8. Pipeline
     pipeline = Pipeline(
         embedder= embedder,
         retriever=retriever,
         prompt_builder=prompt_builder,
-        #llm = llm TODO
+        llm = llm 
     )
 
     return pipeline
