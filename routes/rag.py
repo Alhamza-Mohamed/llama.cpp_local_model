@@ -13,7 +13,7 @@ BaseModel: a Pydantic class that allow define the shape of incoming data and aut
 router = APIRouter() 
 
 class RAGRequest(BaseModel):
-    query:str
+    query:str # define what the request must look like
 """
 Means whoever call this endpoint must send a JSON body with a field called query
 If they send the wrong type or forget the field, FastAPI rejects the request automatically with a helpful error — no manual validation needed.
