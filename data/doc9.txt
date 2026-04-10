@@ -1,0 +1,17 @@
+Embeddings and Vector Representations
+
+Embeddings are dense, low-dimensional vector representations of high-dimensional or discrete data such as words, sentences, images, or users. They are a foundational concept in modern machine learning and enable models to work with data in a continuous geometric space where similar items are placed close together.
+
+Word Embeddings
+Word embeddings map individual words to vectors such that semantically similar words have similar vectors. Word2Vec, introduced by Google in 2013, is one of the earliest and most influential word embedding models. It trains a shallow neural network to predict a word from its context (CBOW) or to predict the context from a word (Skip-gram). The resulting vectors capture semantic relationships, so the vector for king minus the vector for man plus the vector for woman is approximately equal to the vector for queen.
+
+GloVe (Global Vectors) generates embeddings by factorizing a word co-occurrence matrix built from a large corpus. FastText extends Word2Vec by representing words as bags of character n-grams, which allows it to produce embeddings for out-of-vocabulary words.
+
+Sentence and Document Embeddings
+While word embeddings represent individual tokens, sentence embeddings represent entire sentences or paragraphs as single vectors. Models like Sentence-BERT (SBERT) fine-tune BERT using a siamese network architecture on sentence-pair tasks to produce high-quality sentence embeddings. The all-MiniLM-L6-v2 model produces 384-dimensional sentence embeddings and is widely used for semantic search and RAG applications due to its balance of speed and quality.
+
+Cosine Similarity
+The standard metric for comparing embeddings is cosine similarity, which measures the cosine of the angle between two vectors. A cosine similarity of 1 means the vectors point in the same direction and are semantically identical. A value of 0 means they are orthogonal and unrelated. A value of -1 means they are opposite. Cosine similarity is preferred over Euclidean distance for embeddings because it is invariant to the magnitude of the vectors.
+
+Vector Stores
+Vector stores are specialized databases designed to store embeddings and perform fast similarity search. Examples include FAISS, Chroma, Pinecone, Weaviate, and Qdrant. FAISS, developed by Facebook AI Research, supports both exact and approximate nearest neighbor search and is highly optimized for speed. For small datasets, an in-memory vector store with brute-force cosine similarity is sufficient and simple to implement.

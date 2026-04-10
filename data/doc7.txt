@@ -1,0 +1,19 @@
+Overfitting, Regularization, and Model Evaluation
+
+One of the central challenges in machine learning is building models that generalize well to unseen data. A model that performs well on the training set but poorly on new data is said to be overfitting. Understanding the causes of overfitting and the techniques to prevent it is essential for building reliable machine learning systems.
+
+Bias and Variance
+The bias-variance tradeoff describes a fundamental tension in model design. High bias means the model is too simple and underfits the data, failing to capture the underlying patterns. High variance means the model is too complex and overfits, memorizing the training data including its noise. The goal is to find a model with low bias and low variance that generalizes well.
+
+Regularization Techniques
+L2 regularization, also known as weight decay or Ridge regularization, adds a penalty equal to the sum of squared weights to the loss function. This discourages the model from assigning very large weights and keeps them small and distributed. L1 regularization adds a penalty equal to the sum of the absolute values of the weights, which encourages sparsity and can drive some weights to exactly zero.
+
+Dropout is a regularization technique specific to neural networks. During training, a random fraction of neurons is set to zero at each forward pass. This prevents neurons from co-adapting and forces the network to learn redundant representations, improving generalization.
+
+Early stopping monitors validation loss during training and stops the training process when validation performance stops improving. This prevents the model from continuing to overfit after the optimal point has been reached.
+
+Data Augmentation
+Data augmentation artificially increases the size and diversity of the training set by applying random transformations to existing samples. For images, this includes random flips, rotations, cropping, and color jitter. For text, it includes synonym replacement or back-translation. More training data reduces overfitting.
+
+Model Evaluation Metrics
+Accuracy measures the fraction of correct predictions. Precision is the fraction of positive predictions that are actually positive. Recall is the fraction of actual positives that were correctly identified. The F1 score is the harmonic mean of precision and recall. For regression, Mean Absolute Error and Root Mean Squared Error measure average prediction error. Cross-validation provides a more reliable estimate of generalization by training and evaluating on multiple data splits.

@@ -1,0 +1,19 @@
+Retrieval-Augmented Generation (RAG)
+
+Retrieval-Augmented Generation is a technique that enhances the capabilities of Large Language Models by giving them access to an external knowledge base at inference time. Instead of relying solely on information encoded in the model's weights during pre-training, RAG allows the model to retrieve relevant documents and use them as context when generating a response.
+
+Why RAG?
+LLMs have a fixed knowledge cutoff date and cannot access real-time information. They also struggle with tasks that require precise factual recall, as they sometimes hallucinate plausible-sounding but incorrect facts. RAG addresses both problems by grounding the model's responses in retrieved documents.
+
+The RAG Pipeline
+A typical RAG pipeline consists of several stages. First, documents are loaded from a data source such as text files, PDFs, or databases. These documents are split into smaller chunks to fit within the model's context window and to improve retrieval precision. Each chunk is then converted into a dense vector representation called an embedding using an embedding model.
+
+These embeddings are stored in a vector store, which is a database optimized for similarity search. When a user submits a query, the query is also embedded using the same model. The vector store then finds the chunks whose embeddings are most similar to the query embedding, typically using cosine similarity.
+
+The retrieved chunks are inserted into a prompt along with the user's original question. The LLM then generates an answer grounded in the retrieved context. This approach significantly reduces hallucination and improves accuracy for knowledge-intensive tasks.
+
+Embedding Models
+Common embedding models include all-MiniLM-L6-v2, which produces 384-dimensional vectors. BGE models from BAAI and E5 models are also widely used. Larger embedding models like text-embedding-3-large from OpenAI produce 3072-dimensional vectors. The choice of embedding model affects both the quality of retrieval and the memory requirements of the vector store.
+
+Chunking Strategy
+Chunking strategy greatly affects RAG performance. Fixed-size character chunking is the simplest approach. Sentence-aware chunking tries to keep sentences intact. Semantic chunking groups sentences by meaning. Overlap between chunks ensures that context at boundaries is not lost.

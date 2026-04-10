@@ -1,0 +1,21 @@
+Reinforcement Learning
+
+Reinforcement Learning (RL) is a branch of machine learning where an agent learns to make decisions by interacting with an environment. Unlike supervised learning, RL does not require labeled training data. Instead, the agent receives feedback in the form of rewards or penalties based on the actions it takes, and its objective is to maximize the total cumulative reward over time.
+
+Core Concepts
+The agent is the entity that makes decisions. The environment is everything the agent interacts with. At each time step, the agent observes the current state of the environment and selects an action. The environment transitions to a new state and provides a scalar reward signal. The agent's policy is a function that maps states to actions, and the goal of training is to learn an optimal policy.
+
+The Markov Decision Process
+Reinforcement learning problems are formally described as Markov Decision Processes (MDPs). An MDP consists of a set of states, a set of actions, a transition function that defines the probability of moving from one state to another given an action, and a reward function. The Markov property assumes that the next state depends only on the current state and action, not on the history.
+
+Value Functions
+The value function estimates the expected cumulative reward starting from a given state under a given policy. The Q-function (action-value function) estimates the expected cumulative reward starting from a state, taking a specific action, and then following the policy. Learning accurate value functions is central to many RL algorithms.
+
+Q-Learning and Deep Q-Networks
+Q-Learning is a classic off-policy RL algorithm that updates Q-values using the Bellman equation. Deep Q-Networks (DQN) extend Q-learning by using a neural network to approximate the Q-function, allowing RL to scale to high-dimensional state spaces such as raw pixel inputs from games. DQN was famously used by DeepMind to achieve superhuman performance on Atari games.
+
+Policy Gradient Methods
+Policy gradient methods directly optimize the policy by computing gradients of the expected reward with respect to the policy parameters. Proximal Policy Optimization (PPO) is a widely used policy gradient algorithm known for its stability and sample efficiency. PPO is also used as the RL algorithm in RLHF pipelines for aligning LLMs with human preferences.
+
+AlphaGo and AlphaZero
+DeepMind's AlphaGo used a combination of deep neural networks and Monte Carlo tree search to defeat the world champion at the game of Go in 2016. AlphaZero generalized this approach to learn chess, shogi, and Go from scratch using only self-play, without any human expert knowledge.

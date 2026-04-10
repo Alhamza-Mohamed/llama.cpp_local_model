@@ -1,0 +1,18 @@
+Large Language Models (LLMs)
+
+Large Language Models are a class of deep learning models trained on massive text corpora to understand and generate human language. They are based on the Transformer architecture and have demonstrated remarkable capabilities across a wide range of tasks including text generation, question answering, summarization, translation, and code writing.
+
+Pre-training
+LLMs are pre-trained on large datasets scraped from the internet, books, and other sources. During pre-training, the model learns to predict the next token given all previous tokens, a task called causal language modeling. This self-supervised objective requires no human-labeled data and allows models to be trained on trillions of tokens. Through this process, the model implicitly learns grammar, facts, reasoning patterns, and world knowledge.
+
+Model Scale
+The performance of LLMs scales strongly with model size, dataset size, and compute. This relationship was described in scaling laws research by OpenAI. Models with billions of parameters such as GPT-3, LLaMA, Mistral, and Falcon have shown emergent capabilities that do not appear in smaller models. Emergent abilities are behaviors that arise suddenly at a certain scale without being explicitly trained for.
+
+Fine-tuning and Instruction Tuning
+After pre-training, LLMs are fine-tuned to follow instructions. Supervised Fine-Tuning (SFT) trains the model on curated examples of instruction-response pairs. Reinforcement Learning from Human Feedback (RLHF) further aligns the model with human preferences by training a reward model on human comparisons and using it to update the LLM via reinforcement learning.
+
+Quantization and Efficient Inference
+Running LLMs locally is made possible through quantization, which reduces the precision of model weights from 32-bit floats to lower bit representations such as 8-bit integers or 4-bit integers. This drastically reduces memory usage. Tools like llama.cpp enable efficient inference of quantized LLMs on consumer hardware including CPUs and Apple Silicon, without requiring a GPU.
+
+Context Window
+The context window defines the maximum number of tokens an LLM can process at once. Older models had context windows of 2048 tokens. Modern models support 32,000, 128,000, or even longer contexts, allowing them to reason over entire documents or long conversations in a single pass.

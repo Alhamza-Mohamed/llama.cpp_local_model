@@ -1,0 +1,20 @@
+Convolutional Neural Networks (CNNs)
+
+Convolutional Neural Networks are a class of deep learning models specifically designed for processing structured grid data, most commonly images. They have become the standard architecture for computer vision tasks such as image classification, object detection, and semantic segmentation.
+
+Convolution Operation
+The key operation in a CNN is the convolution. A small matrix called a filter or kernel is slid across the input image. At each position, the element-wise product between the kernel and the overlapping region of the image is computed and summed to produce a single output value. This operation detects local patterns such as edges, textures, and shapes.
+
+A single convolutional layer uses many different filters, each learning to detect a different feature. The output of a convolutional layer is called a feature map. Early layers in a CNN tend to detect low-level features like edges and corners, while deeper layers detect high-level features like faces or objects.
+
+Padding and Stride
+Padding adds zeros around the border of the input, allowing the output feature map to maintain the same spatial dimensions as the input. Stride controls how many steps the kernel moves at each position. A stride of 2 reduces the spatial dimensions by half.
+
+Pooling Layers
+Pooling layers reduce the spatial size of feature maps, decreasing computation and providing a form of translation invariance. Max pooling takes the maximum value in each pooling window. Average pooling takes the mean value. Pooling helps the network become less sensitive to the exact position of features.
+
+Batch Normalization
+Batch normalization is a technique commonly applied after convolutional layers. It normalizes the activations within a mini-batch to have zero mean and unit variance, then applies a learned scale and shift. This stabilizes training, allows higher learning rates, and acts as a form of regularization.
+
+Classic CNN Architectures
+LeNet-5 was one of the first successful CNNs, applied to handwritten digit recognition. AlexNet won the 2012 ImageNet competition and demonstrated the power of deep CNNs trained on GPUs. VGG networks used very small 3x3 kernels stacked in deep architectures. ResNet introduced skip connections, allowing gradients to flow directly through layers and enabling networks with hundreds of layers to be trained effectively.

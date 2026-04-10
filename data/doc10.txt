@@ -1,0 +1,21 @@
+Model Quantization and Efficient Inference
+
+As deep learning models grow larger, deploying them efficiently becomes a significant engineering challenge. Quantization is a technique that reduces the memory footprint and computational cost of neural networks by representing weights and activations in lower-precision formats, with minimal loss in model quality.
+
+Why Quantization?
+A standard neural network stores its parameters as 32-bit floating-point numbers (FP32). A model with 7 billion parameters in FP32 requires approximately 28 gigabytes of memory, which exceeds the capacity of most consumer GPUs. Quantization compresses the model so that it fits on available hardware and runs faster.
+
+Post-Training Quantization (PTQ)
+Post-training quantization is applied to an already-trained model without any additional training. It converts weights from FP32 to lower-bit formats such as FP16, INT8, or INT4. INT8 quantization halves memory usage compared to FP16, and INT4 quantization reduces it by another factor of two. GGUF is the file format used by llama.cpp to store quantized models. It supports quantization levels from Q2_K (2 bits per weight) to Q8_0 (8 bits per weight), offering a tradeoff between model size and output quality.
+
+Quantization-Aware Training (QAT)
+Quantization-aware training simulates quantization during the training process, allowing the model to adapt its weights to the lower precision. This typically produces better results than post-training quantization, especially at very low bit widths like 4-bit, but requires additional training compute.
+
+llama.cpp and CPU Inference
+llama.cpp is an open-source inference engine written in C++ that enables running quantized LLMs efficiently on CPUs and Apple Silicon. It supports GGUF quantized models and uses hand-optimized SIMD instructions to accelerate matrix multiplications. This allows models like LLaMA, Mistral, and Qwen to run on consumer laptops and desktops without a GPU.
+
+GGUF Quantization Levels
+The Q4_K_M quantization level uses approximately 4 bits per weight and is the most popular choice for local inference, offering a good balance between quality and size. Q5_K_M retains more accuracy at a slightly larger file size. Q8_0 is nearly lossless compared to FP16 and is used when quality is critical and memory allows. Selecting the right quantization level depends on the available RAM and the required output quality for the application.
+
+KV Cache
+During autoregressive generation, an LLM recomputes key and value matrices for all previous tokens at each step. The KV cache stores these intermediate results so they do not need to be recomputed, dramatically speeding up inference. The size of the KV cache grows linearly with context length and model size, and is a significant contributor to memory usage during generation.
