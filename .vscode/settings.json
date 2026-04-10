@@ -2,5 +2,13 @@
     "cSpell.words": [
         "embedder",
         "linalg"
+    ],
+    "python.analysis.extraPaths": [
+        ".venv\\Lib\\site-packages"
     ]
-}
+        ,
+     "python.defaultInterpreterPath": "D:\\courses\\after graduation\\Repos\\llama.cpp\\.venv\\Scripts\\python.exe",
+     "python.terminal.activateEnvironment": true
+ }
+
+   

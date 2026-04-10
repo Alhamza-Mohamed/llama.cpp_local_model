@@ -31,26 +31,30 @@ Uses Pydantic models to validate requests and structure responses.
 
 
 3- Project Structure
-app/
-├── main.py                # FastAPI entry point
+llama.cpp/
+├── main.py                 # FastAPI entry point
 ├── core/
-│   └── config.py          # Configuration (llama.cpp server URL)
+│   └── config.py           # Configuration (llama.cpp server URL)
 ├── models/
-│   └── schemas.py         # Request and response schemas
+│   └── schemas.py          # Request and response schemas
 ├── services/
-│   └── llama_service.py   # Prompt building and LLM communication logic
-└── routes/
-│   └── chat.py            # Chat endpoint
-│   └── generate.py        # Single-prompt generation endpoint
-├──rag_core/
-	├── document.py        # Document class
-	├── loader.py          # Load text files
-	├── chunker.py         # Chunk documents
-	├── embedder.py        # Embedding logic (open-source model)
-	├── vector_store.py    # Simple in-memory store
-	├── retriever.py       # Cosine similarity search
-	├── prompt.py          # RAG prompt builder
-	└── pipeline.py        # Orchestrates retrieval + LLM call
+│   └── llama_service.py    # Low-level llama.cpp communication
+├── routes/
+│   ├── chat.py             # Chat endpoint (non-RAG)
+│   ├── generate.py         # Single prompt endpoint (non-RAG)
+│   └── rag.py              # RAG endpoint
+├── rag_core/
+│   ├── document.py         # Document class
+│   ├── loader.py           # Load text files
+│   ├── chunker.py          # Chunk documents
+│   ├── embedder.py         # Embedding logic
+│   ├── vector_store.py     # In-memory vector store
+│   ├── retriever.py        # Cosine similarity search
+│   ├── prompt.py           # RAG prompt builder
+│   ├── pipeline.py         # Orchestrates RAG flow
+│   └── llm.py              # LLM adapter (IMPORTANT)
+├── rag_setup.py            # Build pipeline once at startup
+├── data/                   # The documents
 
 
 4- Installation & Setup
