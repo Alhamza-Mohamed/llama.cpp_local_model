@@ -4,74 +4,77 @@ from typing import List
 
 
 def chunk_document(
-    doc: Document,
+    documents: List[Document],
     chunk_size: int = 500,
-    overlap_sentences: int = 2
+    overlap_sentences: int = 50
 ) -> List[Document]:
-    """
-    Split a Document into smaller overlapping chunks.
-
-    Parameters:
-    - doc: The original Document object.
-    - chunk_size: Maximum number of characters per chunk.
-    - overlap_sentences: Number of sentences to overlap between chunks.
-
-    Returns:
-    - List[Document]: New Document objects representing chunks.
-    """
-
-    # Split the document text into sentences.
-    # The regex means:
-    # (?<=[.!?])  → Split AFTER ., !, or ?
-    # \s+         → One or more whitespace characters
-    sentences = re.split(r'(?<=[.!?])\s+', doc.text)
-
     chunks: List[Document] = []
 
-    i = 0  # Sentence index pointer
+    for doc in documents: # Loop over documents
+        """
+        Split a Document into smaller overlapping chunks.
 
-    # Loop until we consume all sentences
-    while i < len(sentences):
+        Parameters:
+        - doc: The original Document object.
+        - chunk_size: Maximum number of characters per chunk.
+        - overlap_sentences: Number of sentences to overlap between chunks.
 
-        chunk_sentences = []
-        current_length = 0
+        Returns:
+        - List[Document]: New Document objects representing chunks.
+        """
 
-        start_sentence_index = i  # Remember where this chunk starts
+        # Split the document text into sentences.
+        # The regex means:
+        # (?<=[.!?])  → Split AFTER ., !, or ?
+        # \s+         → One or more whitespace characters
+        sentences = re.split(r'(?<=[.!?])\s+', doc.text)
 
-        # Keep adding sentences until we hit chunk_size
-        while (
-            i < len(sentences)
-            and current_length + len(sentences[i]) <= chunk_size
-        ):
-            sentence = sentences[i]
-            chunk_sentences.append(sentence)
+        
 
-            # +1 accounts for space when joining sentences
-            current_length += len(sentence) + 1
-            i += 1
+        i = 0  # Sentence index pointer
 
-        # Combine collected sentences into one chunk string
-        chunk_text = " ".join(chunk_sentences)
+        # Loop until we consume all sentences
+        while i < len(sentences):
 
-        # Compute character-level metadata
-        # We approximate start/end by searching inside original text
-        start_char = doc.text.find(chunk_text)
-        end_char = start_char + len(chunk_text)
+            chunk_sentences = []
+            current_length = 0
 
-        # Create a NEW Document object for this chunk
-        chunk_doc = Document(
-            text=chunk_text,
-            metadata={
-                "source": doc.metadata["source"],
-                "start": start_char,
-                "end": end_char,
-            }
-        )
+            start_sentence_index = i  # Remember where this chunk starts
 
-        chunks.append(chunk_doc)
+            # Keep adding sentences until we hit chunk_size
+            while (
+                i < len(sentences)
+                and current_length + len(sentences[i]) <= chunk_size
+            ):
+                sentence = sentences[i]
+                chunk_sentences.append(sentence)
 
-        # Step backward for overlap
-        # This allows the next chunk to re-include the last N sentences
-        i = max(start_sentence_index + len(chunk_sentences) - overlap_sentences, 0)
+                # +1 accounts for space when joining sentences
+                current_length += len(sentence) + 1
+                i += 1
+
+            # Combine collected sentences into one chunk string
+            chunk_text = " ".join(chunk_sentences)
+
+            # Compute character-level metadata
+            # We approximate start/end by searching inside original text
+            start_char = doc.text.find(chunk_text)
+            end_char = start_char + len(chunk_text)
+
+            # Create a NEW Document object for this chunk
+            chunk_doc = Document(
+                text=chunk_text,
+                metadata={
+                    "source": doc.metadata["source"],
+                    "start": start_char,
+                    "end": end_char,
+                }
+            )
+
+            chunks.append(chunk_doc)
+
+            # Step backward for overlap
+            # This allows the next chunk to re-include the last N sentences
+            i = max(start_sentence_index + len(chunk_sentences) - overlap_sentences, 0)
 
     return chunks
