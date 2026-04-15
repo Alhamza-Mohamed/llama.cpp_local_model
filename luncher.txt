@@ -6,7 +6,9 @@ uvicorn main:app --host 127.0.0.1 --port 8000
 
 # API local host: http://127.0.0.1:8000/docs#/default/generate_generate_post
 
-# llama.cpp command
-cd "D:\courses\after graduation\AI\NLP and LLM\llama.cpp".\llama-server.exe -m smollm2-1.7b-instruct-q4_k_m.gguf --n-gpu-layers 99 --port 8081
+# llama.cpp command (in cmd)
+cd /d "D:\courses\after graduation\AI\NLP and LLM\llama.cpp\build\bin\Release"
+llama-server.exe -m "D:\courses\after graduation\AI\NLP and LLM\llama.cpp\smollm2-1.7b-instruct-q4_k_m.gguf" -c 4096 --port 8081
+
 
 # llama.cpp local host: http://localhost:8081/

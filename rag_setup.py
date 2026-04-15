@@ -10,7 +10,7 @@ from rag_core.llm import LlamaLLM
 
 def build_pipeline() -> Pipeline:
     # 1. Load documents
-    documents = load_text_files("llama.cpp\data")
+    documents = load_text_files("llama.cpp/data")
 
     # 2.Chunk
     chunks = chunk_document(documents,chunk_size=500, overlap_sentences=50)
