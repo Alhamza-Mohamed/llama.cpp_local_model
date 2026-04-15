@@ -18,7 +18,7 @@ class Pipeline:
         5. return structured response 
         """
         # 1- Embed query
-        query_vector = self.embedder.embed(query)
+        query_vector = self.embedder.embed_query(query)
 
         # 2- Retrieve relevant documents
         documents: List[Document] = self.retriever.retrieve(query_vector,top_k = top_k)

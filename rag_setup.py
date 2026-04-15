@@ -24,7 +24,7 @@ def build_pipeline() -> Pipeline:
     vector_store.add(vectors,chunks)
 
     # 5. Retriever
-    retriever = Retriever(vector_store,top_k = 5)
+    retriever = Retriever(vector_store) # it was Retriever(vector_store, top_k = 5) and it caused an error
 
     # 6. Prompt builder
     prompt_builder = PromptBuilder()
