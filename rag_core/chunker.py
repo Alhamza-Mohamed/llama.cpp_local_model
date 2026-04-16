@@ -28,7 +28,7 @@ def chunk_document(
         # (?<=[.!?])  → Split AFTER ., !, or ?
         # \s+         → One or more whitespace characters
         sentences = re.split(r'(?<=[.!?])\s+', doc.text)
-
+        sentences = [s.strip() for s in sentences if s.strip()] # removing empty words
         
 
         i = 0  # Sentence index pointer
@@ -70,11 +70,15 @@ def chunk_document(
                     "end": end_char,
                 }
             )
-
-            chunks.append(chunk_doc)
+            if chunk_text.strip(): # only keep non-empty chunks
+                chunks.append(chunk_doc)
 
             # Step backward for overlap
             # This allows the next chunk to re-include the last N sentences
-            i = max(start_sentence_index + len(chunk_sentences) - overlap_sentences, 0)
+            new_i = max(start_sentence_index + len(chunk_sentences) - overlap_sentences, 0) # new_i is to fix the infinite loop
 
+            if new_i <= start_sentence_index:
+                i = start_sentence_index + 1
+            else:
+                i = new_i
     return chunks

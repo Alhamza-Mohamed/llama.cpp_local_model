@@ -9,19 +9,36 @@ from rag_core.llm import LlamaLLM
 
 
 def build_pipeline() -> Pipeline:
-    # 1. Load documents
-    documents = load_text_files("/data")
+    print(">>> BUILD PIPELINE CALLED <<<", flush=True)
 
+    # 1. Load documents
+    documents = load_text_files("data")
+
+    print(">>> documents are loaded <<<", flush=True)
     # 2.Chunk
-    chunks = chunk_document(documents,chunk_size=500, overlap_sentences=50)
+    chunks = chunk_document(documents,chunk_size=500, overlap_sentences=2) # The problem is here 
     
+    print(">>> chunks are loaded <<<", flush=True)
     # 3. Embed
     embedder = SimpleEmbedder()
-    vectors = embedder.embed_documents(chunks)
+    texts = [doc.text for doc in chunks] # separate the text from the whole documents
+    vectors = embedder.embed_documents(texts) # embedder deals with text only not documents
+
+    print("=== VECTOR DEBUG ===")
+    for i, v in enumerate(vectors):
+        try:
+            print(f"{i}: shape= {v.shape}, len={len(v)}")
+        except Exception as e:
+            print(f"{i}: INVALID VECTOR -> {v}, error= {e}")
+
+    for c  in chunks:
+        if not c.text.strip():
+            print ("EMPTY CHUNK FOUND")
 
     # 4. Store
     vector_store = VectorStore()
-    vector_store.add(vectors,chunks)
+    for vec, doc in zip(vectors, chunks):
+        vector_store.add(vec,doc) # add vectors one by one 
 
     # 5. Retriever
     retriever = Retriever(vector_store) # it was Retriever(vector_store, top_k = 5) and it caused an error
