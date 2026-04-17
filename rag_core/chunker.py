@@ -5,7 +5,7 @@ from typing import List
 
 def chunk_document(
     documents: List[Document],
-    chunk_size: int = 500,
+    chunk_size: int = 500, # the character size limit
     overlap_sentences: int = 2
 ) -> List[Document]:
     chunks: List[Document] = []
@@ -37,15 +37,19 @@ def chunk_document(
         while i < len(sentences):
 
             chunk_sentences = []
-            current_length = 0
+            current_length = 0 # counting the characters (letters, number, spaces ) 
 
             start_sentence_index = i  # Remember where this chunk starts
 
             # Keep adding sentences until we hit chunk_size
-            while (
-                i < len(sentences)
-                and current_length + len(sentences[i]) <= chunk_size
-            ):
+            while ( i < len(sentences) and current_length + len(sentences[i]) <= chunk_size):
+                """
+                loop until finish all sentences or the next sentence wont fit inside the list 
+                current_length: how many characters are already in the current chunk
+                len(sentences[i]: how many characters are in the next sentences to add
+                chunk_size: the maximum allowed characters (500)
+                """
+
                 sentence = sentences[i]
                 chunk_sentences.append(sentence)
 
