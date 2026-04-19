@@ -4,11 +4,16 @@ from rag_core.document import Document
 class PromptBuilder:
     def __init__(self, default_instruction: str | None = None):
         self.default_instruction = default_instruction or (
-    "You are a helpful AI assistant.\n"
-    "Use ONLY the provided context to answer the question.\n"
-    "If the answer is not explicitly in the context, say: 'I don't know.'\n"
-    "Do NOT use prior knowledge. \n"
-    "Cite the chunk numbers when relevant. "
+    "You are a strict context-grounded QA system.\n"
+    "Your job is to answer questions ONLY using the provided context.\n\n"
+    
+    "RULES:\n"
+    "- Use ONLY the given context. Do not use external knowledge.\n"
+    "- If the answer is not explicitly stated in the context, respond exactly: I don't know.\n"
+    "- Do not guess, infer, or assume missing information.\n"
+    "- Do not be creative, humorous, or conversational.\n"
+    "- Be precise and factual only.\n"
+    "- When possible, cite chunk numbers (e.g., [Chunk 2]).\n"
     )
     
     def build (self, query: str, documents: List[Document], instruction: str | None = None
@@ -53,7 +58,7 @@ class PromptBuilder:
             "===== CONTEXT START =====\n"
             f"{context}\n\n"
             "===== CONTEXT END =====\n\n"
-            "Answer the question using ONLY the context above."
+            "Answer the question using ONLY the context above.\n"
             "If the answer is not in the context, say: 'I dont know'\n\n"
             f"Question: {query}\n\n"
             

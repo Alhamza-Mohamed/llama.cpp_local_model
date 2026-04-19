@@ -9,7 +9,7 @@ from models.schemas import GenerateRequest, chatRequest, ChatMessage
 def build_prompt(user_prompt : str) -> str: #isolates prompt logic (clean separation)
     
     """
-    Build an instuction-style prompt.
+    Build an instruction-style prompt.
     This tells the model HOW to behaver
     """
     # ### Instruction: tells the model this is a task
@@ -28,7 +28,7 @@ def build_prompt(user_prompt : str) -> str: #isolates prompt logic (clean separa
 def build_chat_prompt(messages: List[ChatMessage]) -> str:
     """
     Build a chat-stile prompt from a list of messages.
-    prepends role headrs (System, User, Assistant) for llama.cpp.
+    prepends role headers (System, User, Assistant) for llama.cpp.
     """
     
     prompt = ""
@@ -43,14 +43,14 @@ def build_chat_prompt(messages: List[ChatMessage]) -> str:
 
 # -------------------- System Message Injection --------------------
 
-DEFAULTE_SYSTEM_MESSAGE = "You are a helpful, concise AI assistant."
+DEFAULT_SYSTEM_MESSAGE = "You are a helpful, concise AI assistant."
 
 def inject_system_message(message: List [ChatMessage]) -> List[ChatMessage]:
     """
-    Ensure a asystem message exists by injecting a default one
-    at the beginnig of the conversation
+    Ensure a system message exists by injecting a default one
+    at the beginning of the conversation
     """
-    system_message = ChatMessage(role="system",content=DEFAULTE_SYSTEM_MESSAGE)
+    system_message = ChatMessage(role="system",content=DEFAULT_SYSTEM_MESSAGE)
     return [system_message,*message] # *message means unpack the list to append it in the [system_message,*message] list
 
 
